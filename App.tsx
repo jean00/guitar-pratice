@@ -26,10 +26,21 @@ export default function App() {
   return (
     <main className="practice-app" style={{ minHeight: "100dvh", backgroundColor: "#111315", color: "#eef0ec" }}>
       <header className="app-header">
-        <div className="app-brand"><Guitar size={24} aria-hidden="true" /><h1>Guitar Practice</h1></div>
-        <button type="button" className="mode-toggle" role="switch"
-          aria-checked={isWaitMode} onClick={() => setIsWaitMode(!isWaitMode)}>
-          <span>Wait mode</span><span className="switch-track" aria-hidden="true"><span /></span>
+        <div className="app-brand">
+          <Guitar size={24} aria-hidden="true" />
+          <h1>Guitar Practice</h1>
+        </div>
+        <button
+          type="button"
+          className="mode-toggle"
+          role="switch"
+          aria-checked={isWaitMode}
+          onClick={() => setIsWaitMode(!isWaitMode)}
+        >
+          <span>Wait mode</span>
+          <span className="switch-track" aria-hidden="true">
+            <span />
+          </span>
         </button>
       </header>
 
@@ -40,7 +51,10 @@ export default function App() {
           <label className="file-picker">
             <Upload size={18} aria-hidden="true" />
             <span>{isLoadingFile ? "Loading file..." : fileName || "Choose Guitar Pro file"}</span>
-            <input type="file" accept=".gp,.gp3,.gp4,.gp5,.gpx" disabled={audioInput.status === "starting"}
+            <input
+              type="file"
+              accept=".gp,.gp3,.gp4,.gp5,.gpx"
+              disabled={audioInput.status === "starting"}
               onChange={async (event) => {
                 const selected = event.target.files?.[0];
                 if (!selected) return;
@@ -57,20 +71,34 @@ export default function App() {
                 } finally {
                   if (revision === fileRevisionRef.current) setIsLoadingFile(false);
                 }
-              }} />
+              }}
+            />
           </label>
-          <button type="button" className="start-button" disabled={!file || isLoadingFile || audioInput.status === "starting"}
-            onClick={() => void startPractice()}>
+          <button
+            type="button"
+            className="start-button"
+            disabled={!file || isLoadingFile || audioInput.status === "starting"}
+            onClick={() => void startPractice()}
+          >
             <AudioLines size={20} aria-hidden="true" />
             {audioInput.status === "starting" ? "Connecting audio..." : "Start Audio & Practice"}
           </button>
-          {(fileError || audioInput.error) && <p className="error-message" role="alert">{fileError || audioInput.error}</p>}
+          {(fileError || audioInput.error) && (
+            <p className="error-message" role="alert">
+              {fileError || audioInput.error}
+            </p>
+          )}
         </section>
-      ) : file && (
-        <section className="session">
-          <div className="session-heading"><h2>{fileName}</h2><span>Session active</span></div>
-          <AlphaTabViewer file={file} audioInput={audioInput} assetBaseUrl="/" />
-        </section>
+      ) : (
+        file && (
+          <section className="session">
+            <div className="session-heading">
+              <h2>{fileName}</h2>
+              <span>Session active</span>
+            </div>
+            <AlphaTabViewer file={file} audioInput={audioInput} assetBaseUrl="/" />
+          </section>
+        )
       )}
     </main>
   );
